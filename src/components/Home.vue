@@ -7,10 +7,10 @@ import { storeToRefs } from "pinia";
 import { ref,getCurrentInstance,computed,onMounted,toRaw,onUpdated,onBeforeMount} from "vue";
 
 // // 定义一个数组来保存todo列表数据,数据来自本地存储
-let { todos } = storeToRefs(todoStore()) as any;
+let { todos,selectedTime } = storeToRefs(todoStore()) as any;
 
 // 点击添加待办事项的方法
-const addTodo = (todo:{ id: string; state: boolean; text: string; }) => {todos.value.unshift(todo);console.log(11);
+const addTodo = (todo:{ id: string; state: boolean; date:String;text: string; }) => {todos.value.unshift(todo);console.log(todo);
 }
 
 onMounted(()=>{
@@ -31,11 +31,11 @@ let filter = ref('all')
 let filteredTodos = computed(()=>{
     switch (filter.value) {
         case "done":
-            return todos.value.filter((todo: { state: any; })=>todo.state)
+            return todos.value.filter((todo: { state: any; date:string})=>todo.state&&todo.date==selectedTime.value)
         case "todo":
-            return todos.value.filter((todo: { state: any; })=>!todo.state)
+            return todos.value.filter((todo: { state: any; date:string})=>!todo.state&&todo.date==selectedTime.value)
         default:
-            return todos.value
+            return todos.value.filter((todo: { state: any; date:string})=> todo.date==selectedTime.value)
     }
 })
 
@@ -52,16 +52,21 @@ onMounted(()=>{
 })
 
 // 日历组件相关的字段
-const value = ref(new Date())
+const deteValue = ref(new Date())
+selectedTime.value = computed(()=>{
+    // 保存选中的时间的字段
+    console.log(deteValue.value.toString().slice(0,15));
+    return deteValue.value.toString().slice(0,15)
+})
 </script>
 
 <template>
   <main>
         <div class="container">
             <!-- 头部区域 -->
-            <h1>欢迎使用 Ling 待办事项!</h1>
+            <h1>欢迎使用待办事项!</h1>
             <!-- 日历区域后续添加 -->
-            <el-calendar v-model="value" class="calendar" />
+            <el-calendar v-model="deteValue" class="calendar" />
             <!-- 添加待办事项区域 -->
             <TodoAdd @addTodo="addTodo"></TodoAdd>
 
@@ -113,6 +118,7 @@ h1 {
     height: 350px;
     margin-bottom: 20px;
     border-radius: 10px;
+    overflow-y: scroll;
 }
 .calendar /deep/  .el-calendar-table .el-calendar-day{
     width: 60px;

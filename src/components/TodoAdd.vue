@@ -1,6 +1,10 @@
 <script setup lang='ts'>
 import { nanoid } from 'nanoid'
 import { ref } from "vue";
+import { todoStore } from "@/stores/todoStore";
+import { storeToRefs } from "pinia";
+
+let { selectedTime } = storeToRefs(todoStore()) as any;
 
 const emit = defineEmits(['addTodo'])
 
@@ -12,6 +16,7 @@ const addTodo = ()=>{
     let newTodoItem = {
         id:nanoid(),
         state:false,
+        date:selectedTime.value,
         text:text.value
     }
     emit('addTodo', newTodoItem)

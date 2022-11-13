@@ -8,10 +8,12 @@ export const todoStore = defineStore({
             todos: [
                 {
                     id: nanoid(),
+                    date: "Thu Nov 17 2022",
                     state: false,
                     text: "快来添加一个todo吧！"
                 }
-            ]
+            ],
+            selectedTime: String
         }
     },
     getters: {

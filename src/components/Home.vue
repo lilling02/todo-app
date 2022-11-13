@@ -6,10 +6,8 @@ import { todoStore } from "@/stores/todoStore";
 import { storeToRefs } from "pinia";
 import { ref,getCurrentInstance,computed,onMounted,toRaw,onUpdated,onBeforeMount} from "vue";
 
-
 // // 定义一个数组来保存todo列表数据,数据来自本地存储
 let { todos } = storeToRefs(todoStore()) as any;
-
 
 // 点击添加待办事项的方法
 const addTodo = (todo:{ id: string; state: boolean; text: string; }) => {todos.value.unshift(todo);console.log(11);
@@ -41,8 +39,8 @@ let filteredTodos = computed(()=>{
     }
 })
 
+// 点击删除键删除对应的 otdo
 onMounted(()=>{
-    // 点击删除键删除对应的 otdo
     const { proxy } =getCurrentInstance() as any
     proxy.mittBus.on('deleteTodo', (todo:{ id: string; state: boolean; text: string; })=> {
     todos.value.forEach((item: { id: string; },index: any)=>{
@@ -53,6 +51,8 @@ onMounted(()=>{
 })
 })
 
+// 日历组件相关的字段
+const value = ref(new Date())
 </script>
 
 <template>
@@ -61,7 +61,7 @@ onMounted(()=>{
             <!-- 头部区域 -->
             <h1>欢迎使用 Ling 待办事项!</h1>
             <!-- 日历区域后续添加 -->
-
+            <el-calendar v-model="value" class="calendar" />
             <!-- 添加待办事项区域 -->
             <TodoAdd @addTodo="addTodo"></TodoAdd>
 
@@ -108,4 +108,14 @@ h1 {
     color: #414873;
 }
 
+/* 日历区域 */
+.calendar {
+    height: 350px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+}
+.calendar /deep/  .el-calendar-table .el-calendar-day{
+    width: 60px;
+    height: 40px;
+  }
 </style>

@@ -13,6 +13,10 @@ let text = ref("")  // 存储输入框的输入值的字段
 // 点击添加待办事项的函数
 const addTodo = ()=>{
     // 收集todo信息
+    if (text.value.trim()=='') {
+        alert('计划不允许为空')
+        return
+    }
     let newTodoItem = {
         id:nanoid(),
         state:false,

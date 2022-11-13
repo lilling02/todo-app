@@ -10,13 +10,13 @@ import './assets/main.css'
 
 
 const app = createApp(App)
-app.config.globalProperties.mittBus = new mitt(); //全局事件总线
 
 const store = createPinia()
 store.use(piniaPluginPersist)
 
 app.use(store)
 // app.use(router)
+app.config.globalProperties.mittBus = mitt(); //全局事件总线
 
 app.mount('#app')
 

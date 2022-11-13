@@ -9,6 +9,10 @@ const { proxy } = getCurrentInstance() as any
 const changeState =(todoItem:{ id: string; state: boolean; text: string; })=>{
     proxy.mittBus.emit('changeTodoItemState',todoItem)
 }
+
+const clickDeleteTodoBtn = (todoItem:{ id: string; state: boolean; text: string; })=>{
+    proxy.mittBus.emit('deleteTodo',todoItem)
+}
 </script>
 
 <template>
@@ -16,6 +20,7 @@ const changeState =(todoItem:{ id: string; state: boolean; text: string; })=>{
         <label for="" :class="{state: props.todoItem.state}">
             <input type="checkbox" :checked="props.todoItem.state"> {{props.todoItem.text}}
             <span class="check-button" @click="changeState(props.todoItem)"></span>
+            <button @click="clickDeleteTodoBtn(props.todoItem)">删除</button>
         </label>
     </div>
 </template>
@@ -60,7 +65,7 @@ const changeState =(todoItem:{ id: string; state: boolean; text: string; })=>{
 .todoItem label span.check-button::after {
     transition: 0.4s;
     background: #b383f9;
-    transform: translate(0px, 0px) scale(0.8);
+    transform: translate(0px, 0px) scale(0.7);
     opacity: 0;
 }
 
@@ -74,4 +79,14 @@ const changeState =(todoItem:{ id: string; state: boolean; text: string; })=>{
     opacity: 1;
 }
 
+button {
+    position: absolute;
+    right: 0;
+    width: 3rem;
+    height: 2rem;
+    line-height: 2rem;
+    color: #939393;
+    border: 0;
+    border-radius: 10px;
+}
 </style>
